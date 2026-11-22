@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.DS_Store
+# Dataset is only needed when retraining locally; it is not needed by the deployed app.
+diabetes_prediction_dataset.csv
