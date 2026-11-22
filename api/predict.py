@@ -89,5 +89,38 @@ class handler(BaseHTTPRequestHandler):
         except Exception:
             return _json_response(self, 500, {"error": "Terjadi kesalahan pada server saat memproses prediksi."})
 
-    def do_GET(self):
-        return _json_response(self, 405, {"error": "Gunakan metode POST untuk endpoint prediksi."})
+   
+def do_GET(self):
+    request_path = self.path.split("?", 1)[0]
+
+    # Menampilkan halaman utama website
+    if request_path in ("/", "/index.html"):
+        html_path = Path(__file__).resolve().parents[1] / "index.html"
+
+        try:
+            body = html_path.read_bytes()
+        except FileNotFoundError:
+            return _json_response(
+                self, 500, {"error": "File index.html tidak ditemukan."}
+            )
+
+        self.send_response(200)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        self.wfile.write(body)
+        return
+
+    # Mengabaikan permintaan favicon
+    if request_path == "/favicon.ico":
+        self.send_response(204)
+        self.end_headers()
+        return
+
+    # Endpoint prediksi tetap membutuhkan POST
+    return _json_response(
+        self, 405,
+        {"error": "Gunakan metode POST untuk endpoint prediksi."}
+    )
+
