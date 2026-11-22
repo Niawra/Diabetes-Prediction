@@ -1,2 +1,14 @@
+
+[project]
+name = "diabetes-prediction"
+version = "1.0.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "numpy==2.3.5",
+    "pandas==2.2.3",
+    "scikit-learn==1.8.0",
+    "joblib==1.5.3"
+]
+
 [tool.vercel]
 entrypoint = "api.predict:handler"
