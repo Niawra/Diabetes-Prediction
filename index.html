@@ -1,52 +1,472 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f5f7fb">
-  <title>Diabetes Prediction | ML Project</title>
+  <title>Prediksi Diabetes | Proyek Pembelajaran Mesin</title>
+
   <style>
-    :root{--ink:#182230;--muted:#667085;--line:#e5eaf1;--blue:#2457d6;--blue2:#173fa8;--bg:#f5f7fb;--white:#fff}
-    *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 8% 0%,#e7efff 0,transparent 32%),var(--bg);color:var(--ink);font:15px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
-    .wrap{width:min(1060px,calc(100% - 36px));margin:42px auto 56px}.top{display:flex;align-items:center;gap:12px;margin-bottom:28px}.mark{width:42px;height:42px;border-radius:14px;background:var(--blue);color:white;display:grid;place-items:center;font-weight:800;font-size:20px;box-shadow:0 8px 20px #2457d633}.brand{font-weight:750;letter-spacing:-.3px}.brand small{display:block;color:var(--muted);font-weight:500;font-size:12px;letter-spacing:0}
-    .hero{margin-bottom:22px}.eyebrow{color:var(--blue);font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase}.hero h1{font-size:clamp(28px,4vw,42px);line-height:1.12;letter-spacing:-1.5px;margin:8px 0 10px}.hero p{color:var(--muted);max-width:650px;margin:0}
-    .layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.75fr);gap:20px;align-items:start}.card{background:var(--white);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:0 12px 34px #172b4d0a}.card h2{font-size:18px;margin:0 0 5px;letter-spacing:-.3px}.sub{font-size:13px;color:var(--muted);margin:0 0 22px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field{min-width:0}.field.full{grid-column:1/-1}label{display:block;font-size:13px;font-weight:650;margin:0 0 7px}input,select{width:100%;height:44px;border:1px solid #d8e0eb;border-radius:10px;padding:0 12px;font:inherit;color:var(--ink);background:white;outline:none}input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px #2457d61a}.checks{display:flex;gap:18px;flex-wrap:wrap;padding-top:5px}.checks label{display:flex;align-items:center;gap:8px;font-weight:550;margin:0}.checks input{width:17px;height:17px;accent-color:var(--blue)}button{border:0;border-radius:11px;background:var(--blue);color:white;font:700 14px inherit;padding:13px 20px;cursor:pointer;width:100%;margin-top:20px;transition:.2s}button:hover{background:var(--blue2)}button:disabled{opacity:.65;cursor:wait}.result{margin-top:16px;border:1px solid var(--line);border-radius:13px;padding:16px;background:#f8faff;display:none}.result.show{display:block}.result strong{display:block;font-size:16px;margin-bottom:4px}.result p{margin:5px 0;color:var(--muted);font-size:13px}.score{font-size:27px;font-weight:800;color:var(--blue);letter-spacing:-.7px}.side{position:sticky;top:20px}.info-icon{width:38px;height:38px;border-radius:12px;background:#edf3ff;color:var(--blue);display:grid;place-items:center;font-weight:800;margin-bottom:14px}.side h2{margin-bottom:8px}.side p,.side li{font-size:13px;color:var(--muted)}.side ul{padding-left:18px;margin:12px 0 0}.notice{margin-top:16px;border:1px solid #f0dfb4;background:#fffaf0;border-radius:13px;padding:14px;color:#75551b;font-size:12px}.foot{text-align:center;color:#98a2b3;font-size:12px;margin-top:25px}
-    @media(max-width:760px){.wrap{margin-top:26px}.layout{grid-template-columns:1fr}.side{position:static}.card{padding:20px}}@media(max-width:480px){.fields{grid-template-columns:1fr}.field.full{grid-column:auto}.wrap{width:calc(100% - 24px)}}
+    :root {
+      --ink: #182230;
+      --muted: #667085;
+      --line: #e5eaf1;
+      --blue: #2457d6;
+      --blue2: #173fa8;
+      --bg: #f5f7fb;
+      --white: #fff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: radial-gradient(circle at 8% 0%, #e7efff 0, transparent 32%), var(--bg);
+      color: var(--ink);
+      font: 15px/1.55 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+
+    .wrap {
+      width: min(1060px, calc(100% - 36px));
+      margin: 42px auto 56px;
+    }
+
+    .top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: var(--blue);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 20px;
+      box-shadow: 0 8px 20px #2457d633;
+    }
+
+    .brand { font-weight: 750; letter-spacing: -.3px; }
+
+    .brand small {
+      display: block;
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 12px;
+      letter-spacing: 0;
+    }
+
+    .hero { margin-bottom: 22px; }
+
+    .eyebrow {
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.12;
+      letter-spacing: -1.5px;
+      margin: 8px 0 10px;
+    }
+
+    .hero p {
+      color: var(--muted);
+      max-width: 650px;
+      margin: 0;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(260px, .75fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 12px 34px #172b4d0a;
+    }
+
+    .card h2 {
+      font-size: 18px;
+      margin: 0 0 5px;
+      letter-spacing: -.3px;
+    }
+
+    .sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 0 0 22px;
+    }
+
+    .fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .field { min-width: 0; }
+    .field.full { grid-column: 1 / -1; }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 650;
+      margin: 0 0 7px;
+    }
+
+    input, select {
+      width: 100%;
+      height: 44px;
+      border: 1px solid #d8e0eb;
+      border-radius: 10px;
+      padding: 0 12px;
+      font: inherit;
+      color: var(--ink);
+      background: white;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px #2457d61a;
+    }
+
+    .checks {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      padding-top: 5px;
+    }
+
+    .checks label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 550;
+      margin: 0;
+    }
+
+    .checks input {
+      width: 17px;
+      height: 17px;
+      accent-color: var(--blue);
+    }
+
+    button {
+      border: 0;
+      border-radius: 11px;
+      background: var(--blue);
+      color: white;
+      font: 700 14px inherit;
+      padding: 13px 20px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 20px;
+      transition: .2s;
+    }
+
+    button:hover { background: var(--blue2); }
+    button:disabled { opacity: .65; cursor: wait; }
+
+    .result {
+      margin-top: 16px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      padding: 16px;
+      background: #f8faff;
+      display: none;
+    }
+
+    .result.show { display: block; }
+
+    .result strong {
+      display: block;
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    .result p {
+      margin: 5px 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .score {
+      font-size: 27px;
+      font-weight: 800;
+      color: var(--blue);
+      letter-spacing: -.7px;
+    }
+
+    .side { position: sticky; top: 20px; }
+
+    .info-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: #edf3ff;
+      color: var(--blue);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    .side h2 { margin-bottom: 8px; }
+
+    .side p, .side li {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .side ul {
+      padding-left: 18px;
+      margin: 12px 0 0;
+    }
+
+    .notice {
+      margin-top: 16px;
+      border: 1px solid #f0dfb4;
+      background: #fffaf0;
+      border-radius: 13px;
+      padding: 14px;
+      color: #75551b;
+      font-size: 12px;
+    }
+
+    .foot {
+      text-align: center;
+      color: #98a2b3;
+      font-size: 12px;
+      margin-top: 25px;
+    }
+
+    @media (max-width: 760px) {
+      .wrap { margin-top: 26px; }
+      .layout { grid-template-columns: 1fr; }
+      .side { position: static; }
+      .card { padding: 20px; }
+    }
+
+    @media (max-width: 480px) {
+      .fields { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
+      .wrap { width: calc(100% - 24px); }
+    }
   </style>
 </head>
+
 <body>
   <main class="wrap">
-    <header class="top"><div class="mark">D</div><div class="brand">Diabetes Prediction<small>Machine Learning Project · PSAS 1</small></div></header>
-    <section class="hero"><div class="eyebrow">Classification model</div><h1>Uji prediksi diabetes<br>berbasis Machine Learning.</h1><p>Masukkan data pada formulir berikut untuk melihat keluaran klasifikasi dari model Random Forest yang telah dilatih menggunakan dataset proyek.</p></section>
+
+    <header class="top">
+      <div class="mark">D</div>
+      <div class="brand">
+        Prediksi Diabetes
+        <small>Proyek Pembelajaran Mesin · PSAS 1</small>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="eyebrow">Model Klasifikasi</div>
+      <h1>Prediksi Diabetes<br>Berbasis Pembelajaran Mesin.</h1>
+      <p>
+        Masukkan data pada formulir berikut untuk melihat hasil klasifikasi
+        dari model Random Forest yang telah dilatih menggunakan dataset proyek.
+      </p>
+    </section>
+
     <div class="layout">
+
       <section class="card">
-        <h2>Data Pengujian</h2><p class="sub">Isi seluruh informasi untuk menjalankan prediksi model.</p>
+        <h2>Data Pengujian</h2>
+        <p class="sub">Lengkapi seluruh informasi untuk menjalankan prediksi model.</p>
+
         <form id="form">
           <div class="fields">
-            <div class="field"><label for="gender">Gender</label><select id="gender" required><option value="">Pilih gender</option><option>Female</option><option>Male</option><option>Other</option></select></div>
-            <div class="field"><label for="age">Age (tahun)</label><input id="age" type="number" min="1" max="100" value="30" required></div>
-            <div class="field"><label for="smoking">Smoking History</label><select id="smoking" required><option value="">Pilih riwayat</option><option value="never">never</option><option value="current">current</option><option value="former">former</option><option value="ever">ever</option><option value="not current">not current</option><option value="No Info">No Info</option></select></div>
-            <div class="field"><label for="bmi">BMI</label><input id="bmi" type="number" min="10" max="80" step="0.1" value="25" required></div>
-            <div class="field"><label for="hba1c">HbA1c Level</label><input id="hba1c" type="number" min="3" max="20" step="0.1" value="5.5" required></div>
-            <div class="field"><label for="glucose">Blood Glucose Level</label><input id="glucose" type="number" min="40" max="500" step="1" value="100" required></div>
-            <div class="field full"><label>Kondisi kesehatan pada dataset</label><div class="checks"><label><input id="hypertension" type="checkbox"> Hypertension</label><label><input id="heart" type="checkbox"> Heart Disease</label></div></div>
+
+            <div class="field">
+              <label for="gender">Jenis Kelamin</label>
+              <select id="gender" required>
+                <option value="">Pilih jenis kelamin</option>
+                <option value="Female">Perempuan</option>
+                <option value="Male">Laki-laki</option>
+                <option value="Other">Lainnya</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="age">Usia (tahun)</label>
+              <input id="age" type="number" min="1" max="100" value="30" required>
+            </div>
+
+            <div class="field">
+              <label for="smoking">Riwayat Merokok</label>
+              <select id="smoking" required>
+                <option value="">Pilih riwayat merokok</option>
+                <option value="never">Tidak pernah</option>
+                <option value="current">Masih merokok</option>
+                <option value="former">Pernah merokok</option>
+                <option value="ever">Pernah merokok</option>
+                <option value="not current">Tidak merokok saat ini</option>
+                <option value="No Info">Tidak ada informasi</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="bmi">Indeks Massa Tubuh (BMI)</label>
+              <input id="bmi" type="number" min="10" max="80" step="0.1" value="25" required>
+            </div>
+
+            <div class="field">
+              <label for="hba1c">Kadar HbA1c</label>
+              <input id="hba1c" type="number" min="3" max="20" step="0.1" value="5.5" required>
+            </div>
+
+            <div class="field">
+              <label for="glucose">Kadar Glukosa Darah</label>
+              <input id="glucose" type="number" min="40" max="500" step="1" value="100" required>
+            </div>
+
+            <div class="field full">
+              <label>Kondisi Kesehatan</label>
+              <div class="checks">
+                <label>
+                  <input id="hypertension" type="checkbox">
+                  Hipertensi
+                </label>
+                <label>
+                  <input id="heart" type="checkbox">
+                  Penyakit Jantung
+                </label>
+              </div>
+            </div>
+
           </div>
+
           <button id="submit" type="submit">Jalankan Prediksi</button>
         </form>
+
         <div class="result" id="result" aria-live="polite"></div>
       </section>
-      <aside class="card side"><div class="info-icon">i</div><h2>Tentang model</h2><p>Website ini menggunakan model Random Forest dengan 15 fitur setelah proses One-Hot Encoding dan StandardScaler.</p><ul><li>Dataset: diabetes_prediction_dataset.csv</li><li>Data dibersihkan dari duplikasi</li><li>Pembagian data: 80% training dan 20% testing</li><li>Parameter model mengikuti hasil GridSearchCV notebook</li></ul><div class="notice"><b>Catatan penting</b><br>Website ini dibuat untuk pembelajaran dan demonstrasi Machine Learning. Hasilnya bukan diagnosis, bukan saran medis, dan tidak boleh digunakan untuk mengambil keputusan kesehatan. Konsultasikan pertanyaan kesehatan kepada tenaga medis.</div></aside>
+
+      <aside class="card side">
+        <div class="info-icon">i</div>
+        <h2>Tentang Model</h2>
+
+        <p>
+          Website ini menggunakan algoritma Random Forest dengan 15 fitur
+          setelah proses One-Hot Encoding dan StandardScaler.
+        </p>
+
+        <ul>
+          <li>Dataset: diabetes_prediction_dataset.csv</li>
+          <li>Data telah dibersihkan dari duplikasi</li>
+          <li>Pembagian data: 80% pelatihan dan 20% pengujian</li>
+          <li>Parameter model mengikuti hasil GridSearchCV pada notebook</li>
+        </ul>
+
+        <div class="notice">
+          <b>Catatan Penting</b><br>
+          Website ini dibuat untuk pembelajaran dan demonstrasi Machine Learning.
+          Hasil prediksi bukan diagnosis atau saran medis dan tidak boleh digunakan
+          sebagai dasar pengambilan keputusan kesehatan. Konsultasikan pertanyaan
+          kesehatan kepada tenaga medis.
+        </div>
+      </aside>
+
     </div>
-    <div class="foot">Educational demonstration · Diabetes Classification</div>
+
+    <div class="foot">
+      Demonstrasi Pembelajaran · Klasifikasi Diabetes
+    </div>
+
   </main>
-<script>
-const form=document.getElementById('form'),button=document.getElementById('submit'),result=document.getElementById('result');
-form.addEventListener('submit',async(e)=>{e.preventDefault();button.disabled=true;button.textContent='Memproses...';result.className='result';result.style.display='none';
- const payload={gender:document.getElementById('gender').value,age:document.getElementById('age').value,smoking_history:document.getElementById('smoking').value,bmi:document.getElementById('bmi').value,hba1c:document.getElementById('hba1c').value,glucose:document.getElementById('glucose').value,hypertension:document.getElementById('hypertension').checked,heart_disease:document.getElementById('heart').checked};
- try{const response=await fetch('/api/predict',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const data=await response.json();if(!response.ok)throw new Error(data.error||'Prediksi gagal.');result.innerHTML=`<strong>${data.label}</strong><div class="score">${data.score}%</div><p>Skor keluaran model untuk kelas 1 (bukan probabilitas klinis).</p><p>${data.message}</p>`;result.className='result show';result.style.display='block';}
- catch(err){result.innerHTML=`<strong>Belum berhasil</strong><p>${err.message}</p>`;result.className='result show';result.style.display='block';}
- finally{button.disabled=false;button.textContent='Jalankan Prediksi';}
-});
-</script>
+
+  <script>
+    const form = document.getElementById('form');
+    const button = document.getElementById('submit');
+    const result = document.getElementById('result');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      button.disabled = true;
+      button.textContent = 'Sedang Memproses...';
+      result.className = 'result';
+      result.style.display = 'none';
+
+      const payload = {
+        gender: document.getElementById('gender').value,
+        age: document.getElementById('age').value,
+        smoking_history: document.getElementById('smoking').value,
+        bmi: document.getElementById('bmi').value,
+        hba1c: document.getElementById('hba1c').value,
+        glucose: document.getElementById('glucose').value,
+        hypertension: document.getElementById('hypertension').checked,
+        heart_disease: document.getElementById('heart').checked
+      };
+
+      try {
+        const response = await fetch('/api/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Prediksi gagal dijalankan.');
+        }
+
+        const heading = document.createElement('strong');
+        heading.textContent = data.label;
+
+        const score = document.createElement('div');
+        score.className = 'score';
+        score.textContent = data.score + '%';
+
+        const explanation = document.createElement('p');
+        explanation.textContent = 'Skor keluaran model untuk kelas 1 (bukan probabilitas klinis).';
+
+        const message = document.createElement('p');
+        message.textContent = data.message;
+
+        result.replaceChildren(heading, score, explanation, message);
+        result.className = 'result show';
+        result.style.display = 'block';
+
+      } catch (err) {
+        const heading = document.createElement('strong');
+        heading.textContent = 'Prediksi Belum Berhasil';
+
+        const message = document.createElement('p');
+        message.textContent = err.message;
+
+        result.replaceChildren(heading, message);
+        result.className = 'result show';
+        result.style.display = 'block';
+
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Jalankan Prediksi';
+      }
+    });
+  </script>
 </body>
 </html>
