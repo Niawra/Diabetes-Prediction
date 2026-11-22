@@ -65,7 +65,6 @@ class handler(BaseHTTPRequestHandler):
                 "blood_glucose_level": glucose,
                 "gender_Female": int(gender == "Female"),
                 "gender_Male": int(gender == "Male"),
-                "gender_Other": int(gender == "Other"),
                 "smoking_history_No Info": int(smoking == "No Info"),
                 "smoking_history_current": int(smoking == "current"),
                 "smoking_history_ever": int(smoking == "ever"),
